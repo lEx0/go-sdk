@@ -13,7 +13,7 @@ const (
 	AITranslate Endpoint = "ai-translate"
 	AIVision    Endpoint = "ai-vision"
 	AISTT       Endpoint = "ai-stt"
-	AITTS       Endpoint = "ai-tts"
+	AISpeechKit Endpoint = "ai-speechkit"
 )
 
 type AI struct {
@@ -33,5 +33,5 @@ func (m *AI) STT() *stt.STT {
 }
 
 func (m *AI) TTS() *tts.TTS {
-	return tts.NewTTS(m.sdk.getConn(AITTS))
+	return tts.NewTTS(m.sdk.getConn(AISpeechKit))
 }
