@@ -5,6 +5,7 @@ package ycsdk
 import (
 	"github.com/yandex-cloud/go-sdk/gen/ai/stt"
 	"github.com/yandex-cloud/go-sdk/gen/ai/translate"
+	"github.com/yandex-cloud/go-sdk/gen/ai/tts"
 	"github.com/yandex-cloud/go-sdk/gen/ai/vision"
 )
 
@@ -12,6 +13,7 @@ const (
 	AITranslate Endpoint = "ai-translate"
 	AIVision    Endpoint = "ai-vision"
 	AISTT       Endpoint = "ai-stt"
+	AITTS       Endpoint = "ai-tts"
 )
 
 type AI struct {
@@ -28,4 +30,8 @@ func (m *AI) Vision() *vision.Vision {
 
 func (m *AI) STT() *stt.STT {
 	return stt.NewSTT(m.sdk.getConn(AISTT))
+}
+
+func (m *AI) TTS() *tts.TTS {
+	return tts.NewTTS(m.sdk.getConn(AITTS))
 }
