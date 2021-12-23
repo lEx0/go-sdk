@@ -264,6 +264,9 @@ func (sdk *SDK) getConn(serviceID Endpoint) func(ctx context.Context) (*grpc.Cli
 				serviceID,
 				sdk.KnownServices())
 		}
+		if serviceID == AISpeechKit {
+			endpoint.Address = "tts.api.cloud.yandex.net:443"
+		}
 		return sdk.cc.GetConn(ctx, endpoint.Address)
 	}
 }
