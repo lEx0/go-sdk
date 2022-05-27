@@ -14,6 +14,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/yandex-cloud/go-genproto/yandex/cloud/endpoint"
 	iampb "github.com/yandex-cloud/go-genproto/yandex/cloud/iam/v1"
@@ -29,6 +30,7 @@ import (
 	"github.com/yandex-cloud/go-sdk/gen/organizationmanager"
 	organizationmanagersaml "github.com/yandex-cloud/go-sdk/gen/organizationmanager/saml"
 	"github.com/yandex-cloud/go-sdk/gen/resourcemanager"
+	"github.com/yandex-cloud/go-sdk/gen/storage-api"
 	"github.com/yandex-cloud/go-sdk/gen/vpc"
 	"github.com/yandex-cloud/go-sdk/gen/ydb"
 	sdk_operation "github.com/yandex-cloud/go-sdk/operation"
@@ -48,6 +50,7 @@ const (
 	OrganizationManagementServiceID Endpoint = "organization-manager"
 	ResourceManagementServiceID     Endpoint = "resource-manager"
 	StorageServiceID                Endpoint = "storage"
+	StorageAPIServiceID             Endpoint = "storage-api"
 	SerialSSHServiceID              Endpoint = "serialssh"
 	// revive:disable:var-naming
 	ApiEndpointServiceID Endpoint = "endpoint"
@@ -125,7 +128,7 @@ func Build(ctx context.Context, conf Config, customOpts ...grpc.DialOption) (*SD
 		dialOpts = append(dialOpts, grpc.WithBlock(), grpc.WithTimeout(conf.DialContextTimeout)) // nolint
 	}
 	if conf.Plaintext {
-		dialOpts = append(dialOpts, grpc.WithInsecure())
+		dialOpts = append(dialOpts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	} else {
 		tlsConfig := conf.TLSConfig
 		if tlsConfig == nil {
@@ -355,3 +358,8 @@ func (sdk *SDK) CreateIAMTokenForServiceAccount(ctx context.Context, serviceAcco
 }
 
 var now = time.Now
+
+// StorageAPI returns storage object for operating with Object Storage service.
+func (sdk *SDK) StorageAPI() *storage.StorageAPI {
+	return storage.NewStorageAPI(sdk.getConn(StorageAPIServiceID))
+}
